@@ -10,7 +10,7 @@ cache:
 
 stages:
   - build
-#  - package
+  - test
 #  - deploy
 
 server-build:
@@ -25,6 +25,17 @@ server-build:
       - server/build/reports/*
       - server/build/libs/*
 
+server-test:
+  image: gradle:4.4.1-jdk8-alpine
+  stage: test
+  script:
+    - "cd server"
+    - "./gradlew check test jacocoTestReport --no-daemon"
+    - "cd .."
+  artifacts:
+    paths:
+      - server/build/reports/*
+
 client-build:
   image: monostream/nodejs-angular-cli:latest
   stage: build
@@ -32,4 +43,13 @@ client-build:
     - cd client
     - "yarn install"
     - "ng build"
+    - "cd .."
+
+client-test:
+  image: monostream/nodejs-angular-cli:latest
+  stage: test
+  script:
+    - cd client
+    - "yarn install"
+    - "ng test --single-run=true --watch=false"
     - "cd .."
