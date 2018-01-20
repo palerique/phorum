@@ -7,7 +7,9 @@ stages:
 #  - package
 #  - deploy
 
-maven-build:
+server-build:
   image: gradle:4.4.1-jdk8-alpine
   stage: build
-  script: "./gradlew build"
+  script:
+    - cd server
+    - "./gradlew build"
