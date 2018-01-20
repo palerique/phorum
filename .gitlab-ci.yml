@@ -1,6 +1,14 @@
 image: docker:latest
+
 services:
   - docker:dind
+
+cache:
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - client/node_modules
+    - server/.gradle/wrapper
+    - server/.gradle/caches
 
 stages:
   - build
@@ -13,3 +21,15 @@ server-build:
   script:
     - cd server
     - "./gradlew build"
+  artifacts:
+    paths:
+      - server/build/reports/*
+      - server/build/libs/*
+
+client-build:
+  image: monostream/nodejs-angular-cli:latest
+  stage: build
+  script:
+    - cd client
+    - "yarn install"
+    - "ng build"
