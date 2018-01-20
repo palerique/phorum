@@ -16,3 +16,5 @@ Server Coverage:
 - Add docker
 - Add Travis CI
 - Add new badges - https://github.com/boennemann/badges | https://github.com/dwyl/repo-badges
+- Add develop branch and use pull requests to merge with master
+- Add table with coverage, build status to other branches
