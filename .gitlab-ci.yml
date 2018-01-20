@@ -7,8 +7,6 @@ cache:
   key: "$CI_BUILD_REF_NAME"
   paths:
     - client/node_modules
-    - server/.gradle/wrapper
-    - server/.gradle/caches
 
 stages:
   - build
@@ -19,8 +17,9 @@ server-build:
   image: gradle:4.4.1-jdk8-alpine
   stage: build
   script:
-    - cd server
+    - "cd server"
     - "./gradlew build"
+    - "cd .."
   artifacts:
     paths:
       - server/build/reports/*
@@ -33,3 +32,4 @@ client-build:
     - cd client
     - "yarn install"
     - "ng build"
+    - "cd .."
