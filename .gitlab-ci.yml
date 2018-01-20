@@ -46,10 +46,10 @@ client-build:
     - "cd .."
 
 client-test:
-  image: monostream/nodejs-angular-cli:latest
+  image: teracy/angular-cli:latest
   stage: test
   script:
     - cd client
     - "yarn install"
-    - "ng test --single-run=true --watch=false"
+    - "ng lint test --browsers Chrome_no_sandbox --single-run=true --watch=false"
     - "cd .."

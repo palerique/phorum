@@ -9,6 +9,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("com.github.ksoichiro:gradle-console-reporter:0.5.0")
 	}
 }
 
@@ -22,6 +23,8 @@ apply plugin: 'jacoco'
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
+
+apply plugin: 'com.github.ksoichiro.console.reporter'
 
 group = 'br.com.ph'
 version = '0.0.1-SNAPSHOT'

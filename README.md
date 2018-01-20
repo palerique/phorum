@@ -1,5 +1,7 @@
-Master: 
+Master Build: 
 [![pipeline status](https://gitlab.com/palerique/phorum/badges/master/pipeline.svg)](https://gitlab.com/palerique/phorum/commits/master)
+
+Server Coverage:
 [![coverage report](https://gitlab.com/palerique/phorum/badges/master/coverage.svg)](https://gitlab.com/palerique/phorum/commits/master)
 
 # TODOs:
@@ -13,3 +15,4 @@ Master:
 - Add migrations
 - Add docker
 - Add Travis CI
+- Add new badges - https://github.com/boennemann/badges | https://github.com/dwyl/repo-badges
