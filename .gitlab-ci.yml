@@ -30,7 +30,7 @@ server-test:
   stage: test
   script:
     - "cd server"
-    - "./gradlew check test jacocoTestReport --no-daemon"
+    - "./gradlew check test integrationTest cobertura --no-daemon"
     - "cd .."
   artifacts:
     paths:

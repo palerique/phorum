@@ -4,7 +4,6 @@ import br.com.ph.phorum.domain.User;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import br.com.ph.phorum.infra.dto.UserDTO;
 import java.util.Optional;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,7 +46,7 @@ public class UserService {
     user.setLogin(userDTO.getLogin());
     user.setName(userDTO.getName());
     user.setEmail(userDTO.getEmail());
-    String encryptedPassword = passwordEncoder.encode(RandomStringUtils.randomAlphanumeric(20));
+    String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
     user.setPassword(encryptedPassword);
     userRepository.save(user);
     log.debug("Created Information for User: {}", user);
