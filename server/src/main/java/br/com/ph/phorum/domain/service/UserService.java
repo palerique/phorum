@@ -4,17 +4,15 @@ import br.com.ph.phorum.domain.User;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import br.com.ph.phorum.infra.dto.UserDTO;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@Log4j2
 public class UserService {
-
-  private final Logger log = LoggerFactory.getLogger(UserService.class);
 
   private final UserRepository userRepository;
 

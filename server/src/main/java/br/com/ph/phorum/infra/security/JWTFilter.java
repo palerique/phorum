@@ -13,7 +13,7 @@ import org.springframework.web.filter.GenericFilterBean;
 
 public class JWTFilter extends GenericFilterBean {
 
-  private TokenProvider tokenProvider;
+  private final TokenProvider tokenProvider;
 
   JWTFilter(TokenProvider tokenProvider) {
     this.tokenProvider = tokenProvider;

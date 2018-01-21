@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import lombok.experimental.UtilityClass;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
@@ -19,6 +21,7 @@ import org.springframework.http.MediaType;
 /**
  * Utility class for testing REST controllers.
  */
+@UtilityClass
 public class TestUtil {
 
   /**
@@ -74,7 +77,8 @@ public class TestUtil {
    * Verifies the equals/hashcode contract on the domain object.
    */
   @SuppressWarnings("unchecked")
-  public static void equalsVerifier(Class clazz) throws Exception {
+  public static void equalsVerifier(Class clazz)
+    throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
     Object domainObject1 = clazz.getConstructor().newInstance();
     assertThat(domainObject1.toString()).isNotNull();
     assertThat(domainObject1).isEqualTo(domainObject1);

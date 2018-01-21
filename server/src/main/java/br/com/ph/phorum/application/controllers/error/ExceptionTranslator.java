@@ -2,9 +2,7 @@ package br.com.ph.phorum.application.controllers.error;
 
 import br.com.ph.phorum.application.controllers.util.HeaderUtil;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -28,6 +26,10 @@ import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProbl
 @ControllerAdvice
 public class ExceptionTranslator implements ProblemHandling {
 
+  private static final String VIOLATIONS = "violations";
+  private static final String MESSAGE = "message";
+  private static final String ERROR_HTTP = "error.http.";
+
   /**
    * Post-process Problem payload to add the message key for front-end if needed
    */
@@ -41,18 +43,32 @@ public class ExceptionTranslator implements ProblemHandling {
     if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
       return entity;
     }
+
     ProblemBuilder builder = Problem.builder()
       .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE
         : problem.getType())
       .withStatus(problem.getStatus())
-      .withTitle(problem.getTitle())
-      .with("path", Objects.requireNonNull(request.getNativeRequest(HttpServletRequest.class))
-        .getRequestURI());
+      .withTitle(problem.getTitle());
 
+    dealWithRequest(request, builder);
+
+    return dealWithConstraintViolationProblems(entity, problem, builder);
+  }
+
+  private void dealWithRequest(NativeWebRequest request, ProblemBuilder builder) {
+    HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
+    if (nativeRequest != null) {
+      builder.with("path", nativeRequest.getRequestURI());
+    }
+  }
+
+  private ResponseEntity<Problem> dealWithConstraintViolationProblems(
+    ResponseEntity<Problem> entity, Problem problem,
+    ProblemBuilder builder) {
     if (problem instanceof ConstraintViolationProblem) {
       builder
-        .with("violations", ((ConstraintViolationProblem) problem).getViolations())
-        .with("message", ErrorConstants.ERR_VALIDATION);
+        .with(VIOLATIONS, ((ConstraintViolationProblem) problem).getViolations())
+        .with(MESSAGE, ErrorConstants.ERR_VALIDATION);
       return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
     } else {
       builder
@@ -60,29 +76,29 @@ public class ExceptionTranslator implements ProblemHandling {
         .withDetail(problem.getDetail())
         .withInstance(problem.getInstance());
       problem.getParameters().forEach(builder::with);
-      if (!problem.getParameters().containsKey("message") && problem.getStatus() != null) {
-        builder.with("message", "error.http." + problem.getStatus().getStatusCode());
+      if (!problem.getParameters().containsKey(MESSAGE) && problem.getStatus() != null) {
+        builder.with(MESSAGE, ERROR_HTTP + problem.getStatus().getStatusCode());
       }
       return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
     }
   }
 
   @Override
-  public ResponseEntity<Problem> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-    @Nonnull NativeWebRequest request) {
-    BindingResult result = ex.getBindingResult();
+  public ResponseEntity<Problem> handleMethodArgumentNotValid(
+    MethodArgumentNotValidException exception, NativeWebRequest request) {
+    BindingResult result = exception.getBindingResult();
     List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
-      .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
-      .collect(Collectors.toList());
+      .map(fieldError -> new FieldErrorVM(fieldError.getObjectName(), fieldError.getField(),
+        fieldError.getCode())).collect(Collectors.toList());
 
     Problem problem = Problem.builder()
       .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
       .withTitle("Method argument not valid")
       .withStatus(defaultConstraintViolationStatus())
-      .with("message", ErrorConstants.ERR_VALIDATION)
+      .with(MESSAGE, ErrorConstants.ERR_VALIDATION)
       .with("fieldErrors", fieldErrors)
       .build();
-    return create(ex, problem, request);
+    return create(exception, problem, request);
   }
 
   @ExceptionHandler(BadRequestAlertException.class)
@@ -97,7 +113,7 @@ public class ExceptionTranslator implements ProblemHandling {
     NativeWebRequest request) {
     Problem problem = Problem.builder()
       .withStatus(Status.CONFLICT)
-      .with("message", ErrorConstants.ERR_CONCURRENCY_FAILURE)
+      .with(MESSAGE, ErrorConstants.ERR_CONCURRENCY_FAILURE)
       .build();
     return create(ex, problem, request);
   }

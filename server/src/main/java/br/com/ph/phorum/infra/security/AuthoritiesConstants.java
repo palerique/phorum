@@ -1,6 +1,6 @@
 package br.com.ph.phorum.infra.security;
 
-public class AuthoritiesConstants {
+public final class AuthoritiesConstants {
 
   public static final String ADMIN = "ROLE_ADMIN";
 

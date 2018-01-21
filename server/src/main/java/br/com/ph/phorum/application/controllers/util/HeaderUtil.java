@@ -1,20 +1,17 @@
 package br.com.ph.phorum.application.controllers.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 
 /**
  * Utility class for HTTP headers creation.
  */
+@Log4j2
+@UtilityClass
 public final class HeaderUtil {
 
-  private static final Logger log = LoggerFactory.getLogger(HeaderUtil.class);
-
-  private HeaderUtil() {
-  }
-
-  public static HttpHeaders createAlert(String message, String param) {
+  private static HttpHeaders createAlert(String message, String param) {
     HttpHeaders headers = new HttpHeaders();
     headers.add("X-phorumApp-alert", message);
     headers.add("X-phorumApp-params", param);

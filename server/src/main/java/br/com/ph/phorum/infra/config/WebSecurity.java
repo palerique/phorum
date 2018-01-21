@@ -50,6 +50,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   }
 
   @PostConstruct
+  @SuppressWarnings("PMD.AvoidCatchingGenericException")
   public void init() {
     try {
       authenticationManagerBuilder
@@ -81,6 +82,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   }
 
   @Override
+  @SuppressWarnings("PMD.SignatureDeclareThrowsException")
   protected void configure(HttpSecurity http) throws Exception {
     http
       .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)

@@ -5,8 +5,7 @@ import br.com.ph.phorum.domain.repository.UserRepository;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,9 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
  * Authenticate a user from the database.
  */
 @Component("userDetailsService")
+@Log4j2
 public class DomainUserDetailsService implements UserDetailsService {
-
-  private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
   private final UserRepository userRepository;
 

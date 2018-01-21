@@ -59,8 +59,6 @@ public class UserResourceTest {
 
   private MockMvc restUserMockMvc;
 
-  private User user;
-
   public static User createEntity(EntityManager em) {
     User user = new User();
     user.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
@@ -82,7 +80,7 @@ public class UserResourceTest {
 
   @Before
   public void initTest() {
-    user = createEntity(em);
+    User user = createEntity(em);
     user.setLogin(DEFAULT_LOGIN);
     user.setEmail(DEFAULT_EMAIL);
   }

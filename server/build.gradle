@@ -80,6 +80,13 @@ findbugs {
   ignoreFailures = false
 }
 
+tasks.withType(FindBugs) {
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
+}
+
 pmd {
   ruleSetFiles = rootProject.files('quality-enforcement/pmd/ruleset.xml')
   ignoreFailures = false

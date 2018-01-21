@@ -31,7 +31,7 @@ public class TokenProvider {
 
   private long tokenValidityInMilliseconds;
 
-  private long tokenValidityInMillisecondsForRememberMe;
+  private long tokenValidityInMilliRememberMe;
 
 
   @PostConstruct
@@ -39,7 +39,7 @@ public class TokenProvider {
     this.secretKey = "123456";
 
     this.tokenValidityInMilliseconds = 1000 * 600;
-    this.tokenValidityInMillisecondsForRememberMe = 1000 * 600;
+    this.tokenValidityInMilliRememberMe = 1000 * 600;
   }
 
   public String createToken(Authentication authentication, Boolean rememberMe) {
@@ -47,10 +47,10 @@ public class TokenProvider {
       .map(GrantedAuthority::getAuthority)
       .collect(Collectors.joining(","));
 
-    long now = (new Date()).getTime();
+    long now = new Date().getTime();
     Date validity;
     if (rememberMe) {
-      validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
+      validity = new Date(now + this.tokenValidityInMilliRememberMe);
     } else {
       validity = new Date(now + this.tokenValidityInMilliseconds);
     }

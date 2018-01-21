@@ -35,7 +35,7 @@ public class AuthenticationResource {
 
     Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
     SecurityContextHolder.getContext().setAuthentication(authentication);
-    boolean rememberMe = (loginVM.getRememberMe() == null) ? false : loginVM.getRememberMe();
+    boolean rememberMe = loginVM.getRememberMe() != null && loginVM.getRememberMe();
     String jwt = tokenProvider.createToken(authentication, rememberMe);
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
