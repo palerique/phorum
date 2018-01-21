@@ -18,3 +18,5 @@ Server Coverage:
 - Add new badges - https://github.com/boennemann/badges | https://github.com/dwyl/repo-badges
 - Add develop branch and use pull requests to merge with master
 - Add table with coverage, build status to other branches
+- Add cache and hibernate second level cache
+- Add git hash endpoint

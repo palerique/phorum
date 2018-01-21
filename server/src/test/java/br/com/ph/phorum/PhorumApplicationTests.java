@@ -13,5 +13,4 @@ public class PhorumApplicationTests {
   public void contextLoads() {
     //Tests the context loading!
   }
-
 }
