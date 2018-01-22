@@ -12,8 +12,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +59,15 @@ public class UserResource {
   public ResponseEntity<List<User>> getAll() {
     log.debug("REST request to retrieve all Users");
     return ResponseEntity.ok().body(userRepository.findAll());
+  }
+
+
+  @GetMapping("/users/{user_id}")
+  public ResponseEntity<User> getById(@PathVariable("user_id") Long userId) {
+    log.debug("REST request to retrieve user #{}", userId);
+    return userRepository.findById(userId)
+        .map(response -> ResponseEntity.ok().body(response))
+        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }
 
