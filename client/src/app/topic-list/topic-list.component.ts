@@ -20,6 +20,6 @@ export class TopicListComponent implements OnInit {
       for (const topic of this.topics) {
         this.giphyService.get(topic.name).subscribe(url => topic.giphyUrl = url);
       }
-    })
+    });
   }
 }

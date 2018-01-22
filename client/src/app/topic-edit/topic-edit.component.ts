@@ -50,12 +50,12 @@ export class TopicEditComponent implements OnInit, OnDestroy {
   save(form: NgForm) {
     this.topicService.save(form).subscribe(result => {
       this.gotoList();
-    }, error => console.error(error))
+    }, error => console.error(error));
   }
 
   remove(href) {
     this.topicService.remove(href).subscribe(result => {
       this.gotoList();
-    }, error => console.error(error))
+    }, error => console.error(error));
   }
 }
