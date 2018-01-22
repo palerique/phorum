@@ -27,8 +27,8 @@ public class BaseApplicationIntegrationTest extends BaseIntegrationTest {
   @Test
   public void shouldShowHealthInfo() throws Exception {
     this.mvc.perform(get("/actuator/health").accept(MediaType.APPLICATION_JSON))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-      .andExpect(jsonPath("$.status").value("UP"));
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(jsonPath("$.status").value("UP"));
   }
 }

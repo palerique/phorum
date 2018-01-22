@@ -28,8 +28,8 @@ public class TestUtil {
    * MediaType for JSON UTF8
    */
   public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
-    MediaType.APPLICATION_JSON.getType(),
-    MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
+      MediaType.APPLICATION_JSON.getType(),
+      MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
 
   /**
    * Convert an object to JSON byte array.
@@ -38,7 +38,7 @@ public class TestUtil {
    * @return the JSON byte array
    */
   public static byte[] convertObjectToJsonBytes(Object object)
-    throws IOException {
+      throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
@@ -78,7 +78,7 @@ public class TestUtil {
    */
   @SuppressWarnings("unchecked")
   public static void equalsVerifier(Class clazz)
-    throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
     Object domainObject1 = clazz.getConstructor().newInstance();
     assertThat(domainObject1.toString()).isNotNull();
     assertThat(domainObject1).isEqualTo(domainObject1);
@@ -129,7 +129,7 @@ public class TestUtil {
         return true;
       } catch (DateTimeParseException e) {
         mismatchDescription.appendText("was ").appendValue(item)
-          .appendText(", which could not be parsed as a ZonedDateTime");
+            .appendText(", which could not be parsed as a ZonedDateTime");
         return false;
       }
 

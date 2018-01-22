@@ -1,6 +1,6 @@
 package br.com.ph.phorum.domain.service;
 
-import br.com.ph.phorum.domain.User;
+import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import br.com.ph.phorum.infra.dto.UserDTO;
 import java.util.Optional;

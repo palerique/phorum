@@ -22,7 +22,7 @@ public class AuthenticationResource {
   private final AuthenticationManager authenticationManager;
 
   public AuthenticationResource(TokenProvider tokenProvider,
-    AuthenticationManager authenticationManager) {
+      AuthenticationManager authenticationManager) {
     this.tokenProvider = tokenProvider;
     this.authenticationManager = authenticationManager;
   }
@@ -31,7 +31,7 @@ public class AuthenticationResource {
   public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
 
     UsernamePasswordAuthenticationToken authenticationToken =
-      new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
+        new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
 
     Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
     SecurityContextHolder.getContext().setAuthentication(authentication);

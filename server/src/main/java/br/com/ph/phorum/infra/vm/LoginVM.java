@@ -11,12 +11,16 @@ import lombok.ToString;
 @ToString
 public class LoginVM {
 
+  public static final int PASSWORD_MIN_LENGTH = 4;
+
+  public static final int PASSWORD_MAX_LENGTH = 100;
+
   @NotNull
   @Size(min = 1, max = 50)
   private String username;
 
   @NotNull
-  @Size(min = ManagedUserVM.PASSWORD_MIN_LENGTH, max = ManagedUserVM.PASSWORD_MAX_LENGTH)
+  @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
   private String password;
 
   private Boolean rememberMe;

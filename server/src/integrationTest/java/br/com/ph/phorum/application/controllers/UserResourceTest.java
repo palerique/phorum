@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import br.com.ph.phorum.PhorumApplication;
 import br.com.ph.phorum.TestUtil;
 import br.com.ph.phorum.application.controllers.error.ExceptionTranslator;
-import br.com.ph.phorum.domain.User;
+import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import br.com.ph.phorum.domain.service.UserService;
 import br.com.ph.phorum.infra.dto.UserDTO;
@@ -72,10 +72,10 @@ public class UserResourceTest {
     MockitoAnnotations.initMocks(this);
     UserResource userResource = new UserResource(userRepository, userService);
     this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
-      .setCustomArgumentResolvers(pageableArgumentResolver)
-      .setControllerAdvice(exceptionTranslator)
-      .setMessageConverters(jacksonMessageConverter)
-      .build();
+        .setCustomArgumentResolvers(pageableArgumentResolver)
+        .setControllerAdvice(exceptionTranslator)
+        .setMessageConverters(jacksonMessageConverter)
+        .build();
   }
 
   @Before
@@ -92,16 +92,16 @@ public class UserResourceTest {
 
     // Create the User
     UserDTO dto = UserDTO.builder()
-      .login(DEFAULT_LOGIN)
-      .password(DEFAULT_PASSWORD)
-      .name(DEFAULT_FIRSTNAME)
-      .email(DEFAULT_EMAIL)
-      .build();
+        .login(DEFAULT_LOGIN)
+        .password(DEFAULT_PASSWORD)
+        .name(DEFAULT_FIRSTNAME)
+        .email(DEFAULT_EMAIL)
+        .build();
 
     restUserMockMvc.perform(post("/api/users")
-      .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(dto)))
-      .andExpect(status().isCreated());
+        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+        .content(TestUtil.convertObjectToJsonBytes(dto)))
+        .andExpect(status().isCreated());
 
     // Validate the User in the database
     List<User> userList = userRepository.findAll();
@@ -120,18 +120,18 @@ public class UserResourceTest {
 
     // Create the User
     UserDTO dto = UserDTO.builder()
-      .id(1L)
-      .login(DEFAULT_LOGIN)
-      .password(DEFAULT_PASSWORD)
-      .name(DEFAULT_FIRSTNAME)
-      .email(DEFAULT_EMAIL)
-      .build();
+        .id(1L)
+        .login(DEFAULT_LOGIN)
+        .password(DEFAULT_PASSWORD)
+        .name(DEFAULT_FIRSTNAME)
+        .email(DEFAULT_EMAIL)
+        .build();
 
     // An entity with an existing ID cannot be created, so this API call must fail
     restUserMockMvc.perform(post("/api/users")
-      .contentType(TestUtil.APPLICATION_JSON_UTF8)
-      .content(TestUtil.convertObjectToJsonBytes(dto)))
-      .andExpect(status().isBadRequest());
+        .contentType(TestUtil.APPLICATION_JSON_UTF8)
+        .content(TestUtil.convertObjectToJsonBytes(dto)))
+        .andExpect(status().isBadRequest());
 
     // Validate the User in the database
     List<User> userList = userRepository.findAll();

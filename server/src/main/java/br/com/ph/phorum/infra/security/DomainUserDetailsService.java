@@ -1,6 +1,6 @@
 package br.com.ph.phorum.infra.security;
 
-import br.com.ph.phorum.domain.User;
+import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import java.util.Collections;
 import java.util.Locale;
@@ -32,21 +32,21 @@ public class DomainUserDetailsService implements UserDetailsService {
     log.debug("Authenticating {}", login);
     String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
     Optional<User> userByEmailFromDatabase = userRepository
-      .findOneByEmail(lowercaseLogin);
+        .findOneByEmail(lowercaseLogin);
     return userByEmailFromDatabase.map(this::createSpringSecurityUser)
-      .orElseGet(() -> {
-        Optional<User> userByLoginFromDatabase = userRepository
-          .findOneByLogin(lowercaseLogin);
-        return userByLoginFromDatabase.map(this::createSpringSecurityUser)
-          .orElseThrow(() -> new UsernameNotFoundException(
-            "User " + lowercaseLogin + " was not found in the " +
-              "database"));
-      });
+        .orElseGet(() -> {
+          Optional<User> userByLoginFromDatabase = userRepository
+              .findOneByLogin(lowercaseLogin);
+          return userByLoginFromDatabase.map(this::createSpringSecurityUser)
+              .orElseThrow(() -> new UsernameNotFoundException(
+                  "User " + lowercaseLogin + " was not found in the " +
+                      "database"));
+        });
   }
 
   private org.springframework.security.core.userdetails.User createSpringSecurityUser(User user) {
     return new org.springframework.security.core.userdetails.User(user.getLogin(),
-      user.getPassword(),
-      Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER)));
+        user.getPassword(),
+        Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER)));
   }
 }

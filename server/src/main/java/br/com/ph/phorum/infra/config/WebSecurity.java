@@ -40,8 +40,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   private final SecurityProblemSupport problemSupport;
 
   public WebSecurity(AuthenticationManagerBuilder authenticationManagerBuilder,
-    UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter,
-    SecurityProblemSupport problemSupport) {
+      UserDetailsService userDetailsService, TokenProvider tokenProvider, CorsFilter corsFilter,
+      SecurityProblemSupport problemSupport) {
     this.authenticationManagerBuilder = authenticationManagerBuilder;
     this.userDetailsService = userDetailsService;
     this.tokenProvider = tokenProvider;
@@ -54,8 +54,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   public void init() {
     try {
       authenticationManagerBuilder
-        .userDetailsService(userDetailsService)
-        .passwordEncoder(passwordEncoder());
+          .userDetailsService(userDetailsService)
+          .passwordEncoder(passwordEncoder());
     } catch (Exception e) {
       throw new BeanInitializationException("Security configuration failed", e);
     }
@@ -68,10 +68,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(
-    org.springframework.security.config.annotation.web.builders.WebSecurity web) {
+      org.springframework.security.config.annotation.web.builders.WebSecurity web) {
     web.ignoring()
-      .antMatchers(HttpMethod.OPTIONS, "/**")
-      .antMatchers("/**");
+        .antMatchers(HttpMethod.OPTIONS, "/**")
+        .antMatchers("/**");
     //TODO block it again!
 //      .antMatchers("/app/**/*.{js,html}")
 //      .antMatchers("/i18n/**")
@@ -85,23 +85,23 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   @SuppressWarnings("PMD.SignatureDeclareThrowsException")
   protected void configure(HttpSecurity http) throws Exception {
     http
-      .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-      .exceptionHandling()
-      .authenticationEntryPoint(problemSupport)
-      .accessDeniedHandler(problemSupport)
-      .and()
-      .csrf()
-      .disable()
-      .headers()
-      .frameOptions()
-      .disable()
-      .and()
-      .sessionManagement()
-      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and()
-      .authorizeRequests()
-      //TODO
-      .antMatchers("/").permitAll()
+        .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling()
+        .authenticationEntryPoint(problemSupport)
+        .accessDeniedHandler(problemSupport)
+        .and()
+        .csrf()
+        .disable()
+        .headers()
+        .frameOptions()
+        .disable()
+        .and()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+        //TODO
+        .antMatchers("/").permitAll()
 //      .antMatchers("/api/register").permitAll()
 //      .antMatchers("/api/authenticate").permitAll()
 //      .antMatchers("/api/profile-info").permitAll()
@@ -109,8 +109,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //      .antMatchers("/management/health").permitAll()
 //      .antMatchers("/v2/api-docs/**").permitAll()
 //      .antMatchers("/swagger-resources/configuration/ui").permitAll()
-      .and()
-      .apply(securityConfigurerAdapter());
+        .and()
+        .apply(securityConfigurerAdapter());
 
   }
 

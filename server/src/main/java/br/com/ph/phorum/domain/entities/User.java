@@ -1,4 +1,4 @@
-package br.com.ph.phorum.domain;
+package br.com.ph.phorum.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;

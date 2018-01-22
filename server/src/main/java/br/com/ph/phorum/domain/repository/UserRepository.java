@@ -1,6 +1,6 @@
 package br.com.ph.phorum.domain.repository;
 
-import br.com.ph.phorum.domain.User;
+import br.com.ph.phorum.domain.entities.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

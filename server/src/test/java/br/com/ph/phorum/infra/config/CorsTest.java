@@ -31,64 +31,64 @@ import org.springframework.web.filter.CorsFilter;
 
 public class CorsTest {
 
-  public static final String OTHER_DOMAIN_COM = "other.domain.com";
-  public static final String API_TEST_CORS = "/api/test-cors";
-  public static final String POST = "POST";
+  private static final String OTHER_DOMAIN_COM = "other.domain.com";
+  private static final String API_TEST_CORS = "/api/test-cors";
+  private static final String POST = "POST";
   private final CorsFilter corsFilter = new Cors().corsFilter();
 
   @Before
   public void setup() {
     MockServletContext servletContext = spy(new MockServletContext());
     doReturn(new MockFilterRegistration())
-      .when(servletContext).addFilter(anyString(), any(Filter.class));
+        .when(servletContext).addFilter(anyString(), any(Filter.class));
     doReturn(new MockServletRegistration())
-      .when(servletContext).addServlet(anyString(), any(Servlet.class));
+        .when(servletContext).addServlet(anyString(), any(Servlet.class));
   }
 
   @Test
   public void testCorsFilterOnApiPath() throws Exception {
 
     MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new WebConfigurerTestController())
-      .addFilters(corsFilter)
-      .build();
+        .addFilters(corsFilter)
+        .build();
 
     mockMvc.perform(
-      options(API_TEST_CORS)
-        .header(HttpHeaders.ORIGIN, OTHER_DOMAIN_COM)
-        .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, POST))
-      .andExpect(status().isOk())
-      .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, OTHER_DOMAIN_COM))
-      .andExpect(header().string(HttpHeaders.VARY, "Origin"))
-      .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET,POST,PUT,DELETE"))
-      .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"))
-      .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "1800"));
+        options(API_TEST_CORS)
+            .header(HttpHeaders.ORIGIN, OTHER_DOMAIN_COM)
+            .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, POST))
+        .andExpect(status().isOk())
+        .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, OTHER_DOMAIN_COM))
+        .andExpect(header().string(HttpHeaders.VARY, "Origin"))
+        .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET,POST,PUT,DELETE"))
+        .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"))
+        .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "1800"));
 
     mockMvc.perform(
-      get(API_TEST_CORS)
-        .header(HttpHeaders.ORIGIN, OTHER_DOMAIN_COM))
-      .andExpect(status().isOk())
-      .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, OTHER_DOMAIN_COM));
+        get(API_TEST_CORS)
+            .header(HttpHeaders.ORIGIN, OTHER_DOMAIN_COM))
+        .andExpect(status().isOk())
+        .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, OTHER_DOMAIN_COM));
   }
 
   @Test
   public void testCorsFilterOnOtherPath() throws Exception {
     MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new WebConfigurerTestController())
-      .addFilters(corsFilter)
-      .build();
+        .addFilters(corsFilter)
+        .build();
 
     mockMvc.perform(
-      get("/test/test-cors")
-        .header(HttpHeaders.ORIGIN, OTHER_DOMAIN_COM))
-      .andExpect(status().isOk())
-      .andExpect(header().doesNotExist(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN));
+        get("/test/test-cors")
+            .header(HttpHeaders.ORIGIN, OTHER_DOMAIN_COM))
+        .andExpect(status().isOk())
+        .andExpect(header().doesNotExist(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN));
   }
 
   static class MockFilterRegistration implements FilterRegistration, FilterRegistration.Dynamic {
 
     @Override
     public void addMappingForServletNames(EnumSet<DispatcherType> dispatcherTypes,
-      boolean isMatchAfter, String... servletNames) {
-      //to mock
+        boolean isMatchAfter, String... servletNames) {
+//to mock
     }
 
     @Override
@@ -98,8 +98,8 @@ public class CorsTest {
 
     @Override
     public void addMappingForUrlPatterns(EnumSet<DispatcherType> dispatcherTypes,
-      boolean isMatchAfter, String... urlPatterns) {
-      //to mock
+        boolean isMatchAfter, String... urlPatterns) {
+//to mock
     }
 
     @Override
@@ -109,7 +109,7 @@ public class CorsTest {
 
     @Override
     public void setAsyncSupported(boolean isAsyncSupported) {
-      //to mock
+//to mock
     }
 
     @Override
@@ -147,7 +147,7 @@ public class CorsTest {
 
     @Override
     public void setLoadOnStartup(int loadOnStartup) {
-      //to mock
+//to mock
     }
 
     @Override
@@ -157,12 +157,12 @@ public class CorsTest {
 
     @Override
     public void setMultipartConfig(MultipartConfigElement multipartConfig) {
-      //to mock
+//to mock
     }
 
     @Override
     public void setAsyncSupported(boolean isAsyncSupported) {
-      //to mock
+//to mock
     }
 
     @Override
@@ -182,7 +182,7 @@ public class CorsTest {
 
     @Override
     public void setRunAsRole(String roleName) {
-      //to mock
+//to mock
     }
 
     @Override
