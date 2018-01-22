@@ -3,3 +3,6 @@
 *.iml
 out
 gen
+/build/h2db/db/phorum.lock.db
+/build/h2db/db/phorum.trace.db
+/build/h2db/db/phorum.mv.db

@@ -1,18 +1,22 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
-
 import {AppComponent} from './app.component';
 
+import {TopicService} from './shared/topic/topic.service';
+import {HttpClientModule} from '@angular/common/http';
+import {TopicListComponent} from './topic-list/topic-list.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TopicListComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [TopicService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
