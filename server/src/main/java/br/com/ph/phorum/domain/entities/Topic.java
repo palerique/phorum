@@ -25,15 +25,18 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Topic {
 
+  public static final int NAME_MAX_LENGTH = 500;
+  public static final int CONTENT_MAX_LENGTH = 5000;
+
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
   @SequenceGenerator(name = "sequenceGenerator")
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = NAME_MAX_LENGTH)
   private String name;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = CONTENT_MAX_LENGTH)
   private String content;
 
   @Column(nullable = false)

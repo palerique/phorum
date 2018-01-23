@@ -23,11 +23,11 @@ public class TopicDTO {
   private Long id;
 
   @NotBlank
-  @Size(min = 1, max = 50)
+  @Size(min = 1, max = Topic.NAME_MAX_LENGTH)
   private String name;
 
   @NotBlank
-  @Size(min = 1, max = 500)
+  @Size(min = 1, max = Topic.CONTENT_MAX_LENGTH)
   private String content;
 
   private LocalDateTime createdIn;

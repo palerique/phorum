@@ -1,3 +1,12 @@
 .giphy {
   margin: 10px;
 }
+
+.topic-form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.topic-form-container > * {
+  width: 100%;
+}

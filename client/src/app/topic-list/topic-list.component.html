@@ -1,15 +1,45 @@
-<mat-card>
-  <mat-card-header>Topic List</mat-card-header>
-  <mat-card-content>
+<h3>Topics</h3>
+
+<mat-accordion multi="false">
+  <mat-expansion-panel style="margin-bottom: 15px" *ngFor="let topic of topics">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span>{{topic.name}}</span>&nbsp;
+        <span style="color: darkgray">{{topic.createdIn | date:'yyyy/MMM/dd HH:mm'}}</span>&nbsp;
+        <span style="color: #67ff6d">{{topic.author.name}}</span>&nbsp;
+      </mat-panel-title>
+      <mat-panel-description style="flex-grow: 0">
+        <span style="color: #ff8e7b">{{topic.category.name}}</span>
+        <!--<mat-icon>map</mat-icon>-->
+        <!--<img mat-card-avatar src="{{topic.giphyUrl}}" alt="{{topic.name}}">-->
+      </mat-panel-description>
+
+    </mat-expansion-panel-header>
+
+
+    <div [innerHTML]="topic.content"></div>
+
+    <br/>
+    <mat-divider></mat-divider>
+
+    <h4>Comments:</h4>
     <mat-list>
-      <mat-list-item *ngFor="let topic of topics">
-        <img mat-list-avatar src="{{topic.giphyUrl}}" alt="{{topic.name}}">
-        <h3 mat-line>
-          <a mat-button [routerLink]="['/topic-edit', topic.id]">{{topic.name}}</a>
-        </h3>
+      <mat-list-item *ngFor="let comment of topic.comments">
+        <span [innerHTML]="comment.content"></span>
+        <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
       </mat-list-item>
     </mat-list>
-  </mat-card-content>
 
-  <button mat-fab color="primary" [routerLink]="['/topic-add']">Add</button>
-</mat-card>
+    <mat-action-row>
+      <a mat-button (click)="openCommentDialog(topic)" color="Accent">INSERT COMMENT</a>
+      <a mat-button [routerLink]="['/topic-edit', topic.id]" color="primary">EDIT</a>
+      <button mat-button color="warn" (click)="remove(topic.id)" type="button">
+        DELETE
+      </button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<div>
+  <button mat-fab color="primary" [routerLink]="['/topic-add']">New</button>
+</div>

@@ -1,0 +1,12 @@
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.basic-container {
+  padding: 20px;
+}
+
+.mat-app-background {
+  min-height: 100%;
+}

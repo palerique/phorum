@@ -21,15 +21,15 @@ export class TopicService {
 
   save(topic: any): Observable<any> {
     let result: Observable<Object>;
-    if (topic['href']) {
-      result = this.http.put(topic.href, topic);
+    if (topic['id']) {
+      result = this.http.put(this.TOPICS_API + '/' + topic.id, topic);
     } else {
       result = this.http.post(this.TOPICS_API, topic);
     }
     return result;
   }
 
-  remove(href: string) {
-    return this.http.delete(href);
+  remove(id: string) {
+    return this.http.delete(this.TOPICS_API + '/' + id);
   }
 }
