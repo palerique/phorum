@@ -23,4 +23,11 @@ public class CategoryService {
         .name(categoryDTO.getName())
         .build());
   }
+
+  public void delete(Long id) {
+    categoryRepository.findById(id).ifPresent(category -> {
+      categoryRepository.delete(category);
+      log.debug("Deleted Category: {}", category);
+    });
+  }
 }

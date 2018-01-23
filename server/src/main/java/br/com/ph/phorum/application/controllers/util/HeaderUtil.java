@@ -11,7 +11,7 @@ import org.springframework.http.HttpHeaders;
 @UtilityClass
 public final class HeaderUtil {
 
-  private static HttpHeaders createAlert(String message, String param) {
+  public static HttpHeaders createAlert(String message, String param) {
     HttpHeaders headers = new HttpHeaders();
     headers.add("X-phorumApp-alert", message);
     headers.add("X-phorumApp-params", param);

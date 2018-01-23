@@ -3,7 +3,6 @@ package br.com.ph.phorum.domain.service;
 import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import br.com.ph.phorum.infra.dto.UserDTO;
-import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,35 +50,8 @@ public class UserService {
     return user;
   }
 
-  public Optional<UserDTO> updateUser(UserDTO userDTO) {
-    //TODO
-//    return Optional.of(userRepository
-//      .findOne(userDTO.getId()))
-//      .map(user -> {
-//        user.setLogin(userDTO.getLogin());
-//        user.setFirstName(userDTO.getFirstName());
-//        user.setLastName(userDTO.getLastName());
-//        user.setEmail(userDTO.getEmail());
-//        user.setImageUrl(userDTO.getImageUrl());
-//        user.setActivated(userDTO.isActivated());
-//        user.setLangKey(userDTO.getLangKey());
-//        Set<Authority> managedAuthorities = user.getAuthorities();
-//        managedAuthorities.clear();
-//        userDTO.getAuthorities().stream()
-//          .map(authorityRepository::findOne)
-//          .forEach(managedAuthorities::add);
-//        cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
-//        cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
-//        log.debug("Changed Information for User: {}", user);
-//        return user;
-//      })
-//      .map(UserDTO::new);
-    log.error("Method to be implemented");
-    return Optional.of(userDTO);
-  }
-
-  public void deleteUser(String login) {
-    userRepository.findOneByLogin(login).ifPresent(user -> {
+  public void delete(Long id) {
+    userRepository.findById(id).ifPresent(user -> {
       userRepository.delete(user);
       log.debug("Deleted User: {}", user);
     });

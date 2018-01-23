@@ -3,6 +3,7 @@ package br.com.ph.phorum.application.controllers;
 import br.com.ph.phorum.application.controllers.error.BadRequestAlertException;
 import br.com.ph.phorum.application.controllers.error.EmailAlreadyUsedException;
 import br.com.ph.phorum.application.controllers.error.LoginAlreadyUsedException;
+import br.com.ph.phorum.application.controllers.util.HeaderUtil;
 import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import br.com.ph.phorum.domain.service.UserService;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,6 +70,15 @@ public class UserResource {
     return userRepository.findById(userId)
         .map(response -> ResponseEntity.ok().body(response))
         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @DeleteMapping("/categories/{user_id}")
+  public ResponseEntity<Void> deleteUser(@PathVariable("user_id") Long id) {
+    log.debug("REST request to delete User #{}", id);
+    userService.delete(id);
+    return ResponseEntity.ok().headers(HeaderUtil
+        .createAlert("A user is deleted with identifier #" + id, id.toString()))
+        .build();
   }
 }
 

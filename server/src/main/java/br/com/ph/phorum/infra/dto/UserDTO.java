@@ -1,5 +1,6 @@
 package br.com.ph.phorum.infra.dto;
 
+import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.infra.security.Constants;
 import java.util.Set;
 import javax.validation.constraints.Email;
@@ -39,4 +40,10 @@ public class UserDTO {
   private String email;
 
   private Set<String> authorities;
+
+  UserDTO(User user) {
+    this.id = user.getId();
+    this.login = user.getLogin();
+    this.name = user.getName();
+  }
 }

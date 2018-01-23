@@ -2,6 +2,7 @@ package br.com.ph.phorum.application.controllers;
 
 import br.com.ph.phorum.application.controllers.error.BadRequestAlertException;
 import br.com.ph.phorum.application.controllers.error.CategoryNameAlreadyUsedException;
+import br.com.ph.phorum.application.controllers.util.HeaderUtil;
 import br.com.ph.phorum.domain.entities.Category;
 import br.com.ph.phorum.domain.repository.CategoryRepository;
 import br.com.ph.phorum.domain.service.CategoryService;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,5 +65,14 @@ public class CategoryResource {
     return categoryRepository.findById(categoryId)
         .map(response -> ResponseEntity.ok().body(response))
         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @DeleteMapping("/categories/{category_id}")
+  public ResponseEntity<Void> deleteUser(@PathVariable("category_id") Long id) {
+    log.debug("REST request to delete Category #{}", id);
+    categoryService.delete(id);
+    return ResponseEntity.ok().headers(HeaderUtil
+        .createAlert("A category is deleted with identifier #" + id, id.toString()))
+        .build();
   }
 }

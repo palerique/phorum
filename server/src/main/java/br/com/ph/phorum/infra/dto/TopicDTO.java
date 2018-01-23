@@ -1,5 +1,6 @@
 package br.com.ph.phorum.infra.dto;
 
+import br.com.ph.phorum.domain.entities.Topic;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -35,4 +36,13 @@ public class TopicDTO {
 
   @NotNull
   private CategoryDTO category;
+
+  public TopicDTO(Topic topic) {
+    this.id = topic.getId();
+    this.name = topic.getName();
+    this.content = topic.getContent();
+    this.createdIn = topic.getCreatedIn();
+    this.author = new UserDTO(topic.getAuthor());
+    this.category = new CategoryDTO(topic.getCategory());
+  }
 }

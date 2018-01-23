@@ -1,6 +1,7 @@
 package br.com.ph.phorum.application.controllers;
 
 import br.com.ph.phorum.application.controllers.error.BadRequestAlertException;
+import br.com.ph.phorum.application.controllers.util.HeaderUtil;
 import br.com.ph.phorum.domain.entities.Topic;
 import br.com.ph.phorum.domain.repository.TopicRepository;
 import br.com.ph.phorum.domain.service.TopicService;
@@ -8,13 +9,16 @@ import br.com.ph.phorum.infra.dto.TopicDTO;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,6 +63,25 @@ public class TopicResource {
     return topicRepository.findById(topicId)
         .map(response -> ResponseEntity.ok().body(response))
         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @PutMapping("/topics")
+  public ResponseEntity<TopicDTO> updateUser(@Valid @RequestBody TopicDTO topicDTO) {
+    log.debug("REST request to update Topic : {}", topicDTO);
+
+    Optional<TopicDTO> updatedTopic = topicService.updateTopic(topicDTO);
+
+    return updatedTopic.map(response -> ResponseEntity.ok().body(response))
+        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  @DeleteMapping("/topics/{topic_id}")
+  public ResponseEntity<Void> deleteTopic(@PathVariable("topic_id") Long id) {
+    log.debug("REST request to delete Topic #{}", id);
+    topicService.delete(id);
+    return ResponseEntity.ok().headers(HeaderUtil
+        .createAlert("A topic is deleted with identifier #" + id, id.toString()))
+        .build();
   }
 }
 
