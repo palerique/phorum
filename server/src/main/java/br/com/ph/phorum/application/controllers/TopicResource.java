@@ -5,11 +5,11 @@ import br.com.ph.phorum.application.controllers.util.HeaderUtil;
 import br.com.ph.phorum.domain.entities.Topic;
 import br.com.ph.phorum.domain.repository.TopicRepository;
 import br.com.ph.phorum.domain.service.TopicService;
+import br.com.ph.phorum.infra.dto.AnswerDTO;
 import br.com.ph.phorum.infra.dto.TopicDTO;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,11 +36,10 @@ public class TopicResource {
     this.topicService = topicService;
   }
 
-
   @PostMapping("/topics")
   public ResponseEntity<Topic> createTopic(@Valid @RequestBody TopicDTO topicDTO)
       throws URISyntaxException {
-    log.debug("REST request to save Topic : {}", topicDTO);
+    log.debug("REST request to save Topic: {}", topicDTO);
 
     if (topicDTO.getId() != null) {
       throw new BadRequestAlertException("A new topic cannot already have an ID", "topicManagement",
@@ -51,10 +50,25 @@ public class TopicResource {
     }
   }
 
+  @PutMapping("/topics")
+  public ResponseEntity<Topic> updateTopic(@Valid @RequestBody TopicDTO topicDTO) {
+    log.debug("REST request to update Topic: {}", topicDTO);
+
+    if (topicDTO.getId() == null) {
+      throw new BadRequestAlertException("A new topic should already have an ID", "topicManagement",
+          "idinexists");
+    } else {
+      return topicService.updateTopic(topicDTO)
+          .map(response -> ResponseEntity.ok().body(response))
+          .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+  }
+
   @GetMapping("/topics")
-  public ResponseEntity<List<Topic>> getAll() {
+  public ResponseEntity<List<TopicDTO>> getAll() {
     log.debug("REST request to retrieve all topics");
-    return ResponseEntity.ok().body(topicRepository.findAll());
+    List<TopicDTO> topicDTOS = topicService.getAll();
+    return ResponseEntity.ok().body(topicDTOS);
   }
 
   @GetMapping("/topics/{topic_id}")
@@ -65,16 +79,6 @@ public class TopicResource {
         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @PutMapping("/topics")
-  public ResponseEntity<TopicDTO> updateUser(@Valid @RequestBody TopicDTO topicDTO) {
-    log.debug("REST request to update Topic : {}", topicDTO);
-
-    Optional<TopicDTO> updatedTopic = topicService.updateTopic(topicDTO);
-
-    return updatedTopic.map(response -> ResponseEntity.ok().body(response))
-        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-  }
-
   @DeleteMapping("/topics/{topic_id}")
   public ResponseEntity<Void> deleteTopic(@PathVariable("topic_id") Long id) {
     log.debug("REST request to delete Topic #{}", id);
@@ -82,6 +86,18 @@ public class TopicResource {
     return ResponseEntity.ok().headers(HeaderUtil
         .createAlert("A topic is deleted with identifier #" + id, id.toString()))
         .build();
+  }
+
+  @PostMapping("/topics/{topic_id}/comments")
+  public ResponseEntity<TopicDTO> createTopic(
+      @PathVariable("topic_id") Long topicId,
+      @Valid @RequestBody AnswerDTO answerDTO
+  ) {
+    log.debug("REST request to add comment: {} to Topic #{}", answerDTO, topicId);
+
+    return topicService.addComment(topicId, answerDTO)
+        .map(response -> ResponseEntity.ok().body(response))
+        .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
   }
 }
 

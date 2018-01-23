@@ -1,14 +1,19 @@
 package br.com.ph.phorum.domain.service;
 
 import br.com.ph.phorum.application.controllers.error.BadRequestAlertException;
+import br.com.ph.phorum.domain.entities.Answer;
 import br.com.ph.phorum.domain.entities.Category;
 import br.com.ph.phorum.domain.entities.Topic;
 import br.com.ph.phorum.domain.entities.User;
+import br.com.ph.phorum.domain.repository.AnswerRepository;
 import br.com.ph.phorum.domain.repository.CategoryRepository;
 import br.com.ph.phorum.domain.repository.TopicRepository;
 import br.com.ph.phorum.domain.repository.UserRepository;
+import br.com.ph.phorum.infra.dto.AnswerDTO;
 import br.com.ph.phorum.infra.dto.TopicDTO;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -23,13 +28,16 @@ public class TopicService {
   private final TopicRepository topicRepository;
   private final UserRepository userRepository;
   private final CategoryRepository categoryRepository;
+  private final AnswerRepository answerRepository;
 
   public TopicService(TopicRepository topicRepository,
       UserRepository userRepository,
-      CategoryRepository categoryRepository) {
+      CategoryRepository categoryRepository,
+      AnswerRepository answerRepository) {
     this.topicRepository = topicRepository;
     this.userRepository = userRepository;
     this.categoryRepository = categoryRepository;
+    this.answerRepository = answerRepository;
   }
 
   public Topic createTopic(TopicDTO topicDTO) {
@@ -54,15 +62,15 @@ public class TopicService {
 
   public void delete(Long id) {
     topicRepository.findById(id).ifPresent(topic -> {
+      answerRepository.deleteAll(topic.getAnswers());
       topicRepository.delete(topic);
       log.debug("Deleted Topic: {}", topic);
     });
   }
 
-  public Optional<TopicDTO> updateTopic(@Valid TopicDTO topicDTO) {
+  public Optional<Topic> updateTopic(@Valid TopicDTO topicDTO) {
     return topicRepository.findById(topicDTO.getId())
-        .map((Topic topic) -> getTopic(topicDTO, topic))
-        .map(TopicDTO::new);
+        .map((Topic topic) -> getTopic(topicDTO, topic));
   }
 
   private Topic getTopic(@Valid TopicDTO topicDTO, Topic topic) {
@@ -81,6 +89,26 @@ public class TopicService {
     topic.setCategory(optionalCategory.get());
     log.debug("Changed Information for Topic: {}", topic);
     return topic;
+  }
+
+  public Optional<TopicDTO> addComment(Long topicId, AnswerDTO answerDTO) {
+    Optional<Topic> optionalTopic = topicRepository.findById(topicId);
+    if (optionalTopic.isPresent()) {
+      Topic topic = optionalTopic.get();
+      Answer answer = new Answer(topic, getUser(), answerDTO);
+      answerRepository.save(answer);
+      topic.addAnswer(answer);
+      return Optional.of(new TopicDTO(topic));
+    }
+    return Optional.empty();
+  }
+
+  public List<TopicDTO> getAll() {
+    List<TopicDTO> result = new ArrayList<>();
+    for (Topic topic : topicRepository.findAll()) {
+      result.add(new TopicDTO(topic));
+    }
+    return result;
   }
 }
 

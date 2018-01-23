@@ -22,10 +22,16 @@ export class TopicService {
   save(topic: any): Observable<any> {
     let result: Observable<Object>;
     if (topic['id']) {
-      result = this.http.put(this.TOPICS_API + '/' + topic.id, topic);
+      result = this.http.put(this.TOPICS_API, topic);
     } else {
       result = this.http.post(this.TOPICS_API, topic);
     }
+    return result;
+  }
+
+  addComment(topic: any, comment: any): Observable<any> {
+    let result: Observable<Object>;
+    result = this.http.post(this.TOPICS_API + '/' + topic.id + '/comments', comment);
     return result;
   }
 

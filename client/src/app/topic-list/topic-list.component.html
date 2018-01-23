@@ -19,16 +19,22 @@
 
     <div [innerHTML]="topic.content"></div>
 
-    <br/>
-    <mat-divider></mat-divider>
+    <div *ngIf="topic.comments && topic.comments.length > 0">
 
-    <h4>Comments:</h4>
-    <mat-list>
-      <mat-list-item *ngFor="let comment of topic.comments">
-        <span [innerHTML]="comment.content"></span>
-        <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-      </mat-list-item>
-    </mat-list>
+      <br/>
+      <mat-divider></mat-divider>
+
+      <h4>Comments:</h4>
+      <mat-list>
+        <mat-list-item *ngFor="let comment of topic.comments">
+          <span>{{comment.author.name}}</span>&nbsp;
+          <span style="color: darkgray">{{comment.createdIn | date:'yyyy/MMM/dd HH:mm'}}</span>&nbsp;
+          <span [innerHTML]="comment.content"></span>
+          <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+        </mat-list-item>
+      </mat-list>
+
+    </div>
 
     <mat-action-row>
       <a mat-button (click)="openCommentDialog(topic)" color="Accent">INSERT COMMENT</a>

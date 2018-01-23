@@ -53,22 +53,15 @@ export class TopicListComponent implements OnInit {
 })
 export class DialogDataExampleDialog {
   constructor(public dialogRef: MatDialogRef<DialogDataExampleDialog>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private topicService: TopicService) {
   }
 
   save(data: any) {
-    // this.topicService.save(form).subscribe(result => {
-    //   this.gotoList();
-    // }, error => console.error(error));
-    console.log(data);
-
-    if (data.topic.comments) {
-      data.topic.comments.push(data.comment);
-    } else {
-      data.topic.comments = [data.comment];
-    }
-
-    this.dialogRef.close();
+    this.topicService.addComment(data.topic, data.comment).subscribe(result => {
+      data.topic.comments = result.comments;
+      this.dialogRef.close();
+    }, error => console.error(error));
   }
 
   onNoClick(): void {

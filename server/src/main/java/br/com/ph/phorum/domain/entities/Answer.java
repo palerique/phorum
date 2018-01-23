@@ -1,5 +1,6 @@
 package br.com.ph.phorum.domain.entities;
 
+import br.com.ph.phorum.infra.dto.AnswerDTO;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,4 +44,11 @@ public class Answer {
   @ManyToOne
   @JoinColumn(name = "authorId", nullable = false)
   private User author;
+
+  public Answer(Topic topic, User author, AnswerDTO answerDTO) {
+    this.author = author;
+    this.content = answerDTO.getContent();
+    this.createdIn = LocalDateTime.now();
+    this.topic = topic;
+  }
 }
