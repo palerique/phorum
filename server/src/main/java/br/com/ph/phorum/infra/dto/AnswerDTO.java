@@ -2,13 +2,13 @@ package br.com.ph.phorum.infra.dto;
 
 import br.com.ph.phorum.domain.entities.Answer;
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Getter
 @Setter

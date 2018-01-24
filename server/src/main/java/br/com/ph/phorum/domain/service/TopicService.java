@@ -1,8 +1,6 @@
 package br.com.ph.phorum.domain.service;
 
-import br.com.ph.phorum.application.controllers.error.BadRequestAlertException;
 import br.com.ph.phorum.domain.entities.Answer;
-import br.com.ph.phorum.domain.entities.Category;
 import br.com.ph.phorum.domain.entities.Topic;
 import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.domain.repository.AnswerRepository;
@@ -61,46 +59,31 @@ public class TopicService {
   }
 
   public void delete(Long id) {
-    topicRepository.findById(id).ifPresent(topic -> {
-      answerRepository.deleteAll(topic.getAnswers());
-      topicRepository.delete(topic);
-      log.debug("Deleted Topic: {}", topic);
-    });
+    Topic topic = topicRepository.getOne(id);
+    answerRepository.deleteInBatch(topic.getAnswers());
+    topicRepository.delete(topic);
+    log.debug("Deleted Topic: {}", topic);
   }
 
   public Optional<Topic> updateTopic(@Valid TopicDTO topicDTO) {
-    return topicRepository.findById(topicDTO.getId())
-        .map((Topic topic) -> getTopic(topicDTO, topic));
+    return Optional.of(getTopic(topicDTO, topicRepository.getOne(topicDTO.getId())));
   }
 
   private Topic getTopic(@Valid TopicDTO topicDTO, Topic topic) {
     topic.setName(topicDTO.getName());
     topic.setContent(topicDTO.getContent());
 
-    Optional<Category> optionalCategory =
-        categoryRepository.findById(topicDTO.getCategory().getId());
-
-    if (!optionalCategory.isPresent()) {
-      throw new BadRequestAlertException("The chosen category was not found",
-          "topicManagement",
-          "categoryNotFound");
-    }
-
-    topic.setCategory(optionalCategory.get());
+    topic.setCategory(categoryRepository.findOne(topicDTO.getCategory().getId()));
     log.debug("Changed Information for Topic: {}", topic);
     return topic;
   }
 
   public Optional<TopicDTO> addComment(Long topicId, AnswerDTO answerDTO) {
-    Optional<Topic> optionalTopic = topicRepository.findById(topicId);
-    if (optionalTopic.isPresent()) {
-      Topic topic = optionalTopic.get();
-      Answer answer = new Answer(topic, getUser(), answerDTO);
-      answerRepository.save(answer);
-      topic.addAnswer(answer);
-      return Optional.of(new TopicDTO(topic));
-    }
-    return Optional.empty();
+    Topic topic = topicRepository.findOne(topicId);
+    Answer answer = new Answer(topic, getUser(), answerDTO);
+    answerRepository.save(answer);
+    topic.addAnswer(answer);
+    return Optional.of(new TopicDTO(topic));
   }
 
   public List<TopicDTO> getAll() {

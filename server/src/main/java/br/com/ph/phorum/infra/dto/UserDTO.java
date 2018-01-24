@@ -3,8 +3,6 @@ package br.com.ph.phorum.infra.dto;
 import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.infra.security.Constants;
 import java.util.Set;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -13,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 @AllArgsConstructor
 @NoArgsConstructor

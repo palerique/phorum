@@ -62,9 +62,12 @@ public class CategoryResource {
   @GetMapping("/categories/{category_id}")
   public ResponseEntity<Category> getById(@PathVariable("category_id") Long categoryId) {
     log.debug("REST request to retrieve category #{}", categoryId);
-    return categoryRepository.findById(categoryId)
-        .map(response -> ResponseEntity.ok().body(response))
-        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+    if (!categoryRepository.exists(categoryId)) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return ResponseEntity.ok().body(categoryRepository.getOne(categoryId));
   }
 
   @DeleteMapping("/categories/{category_id}")

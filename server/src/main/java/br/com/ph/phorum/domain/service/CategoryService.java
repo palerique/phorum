@@ -25,9 +25,7 @@ public class CategoryService {
   }
 
   public void delete(Long id) {
-    categoryRepository.findById(id).ifPresent(category -> {
-      categoryRepository.delete(category);
-      log.debug("Deleted Category: {}", category);
-    });
+    log.debug("Deleted Category #{}", id);
+    categoryRepository.delete(categoryRepository.getOne(id));
   }
 }

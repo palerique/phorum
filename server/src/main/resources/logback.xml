@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true">
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>DEBUG</level>
+    </filter>
+    <encoder>
+      <pattern>%gray(%d{yyyy-MM-dd HH:mm:ss.SSSXXX}) %cyan(%logger) %highlight(%msg
+        [%class{0}:%line]%n%xThrowable) %nopex
+      </pattern>
+    </encoder>
+  </appender>
+
+  <appender class="ch.qos.logback.core.FileAppender" name="FILE">
+    <file>target/test.log</file>
+    <append>false</append>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSSXXX} %-5level %logger %msg at %class{0}:%line%n</pattern>
+    </encoder>
+  </appender>
+  <root level="info">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="FILE"/>
+  </root>
+
+  <!-- Log at different levels for different 3rd party components   -->
+  <logger level="INFO" name="org.apache"/>
+  <logger level="INFO" name="httpclient"/>
+  <logger level="INFO" name="org.springframework"/>
+  <logger level="INFO" name="org.hibernate"/>
+  <logger level="INFO" name="com.amazonaws"/>
+  <logger level="INFO" name="org.flywaydb"/>
+  <logger level="debug" name="br.com.ph"/>
+  <logger level="INFO" name="io.restassured"/>
+  <logger level="ERROR" name="net.sourceforge.cobertura"/>
+  <logger level="ERROR" name="com.zaxxer.hikari"/>
+
+</configuration>

@@ -74,9 +74,12 @@ public class TopicResource {
   @GetMapping("/topics/{topic_id}")
   public ResponseEntity<Topic> getById(@PathVariable("topic_id") Long topicId) {
     log.debug("REST request to retrieve topic #{}", topicId);
-    return topicRepository.findById(topicId)
-        .map(response -> ResponseEntity.ok().body(response))
-        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+    if (!topicRepository.exists(topicId)) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return ResponseEntity.ok().body(topicRepository.getOne(topicId));
   }
 
   @DeleteMapping("/topics/{topic_id}")
@@ -94,7 +97,6 @@ public class TopicResource {
       @Valid @RequestBody AnswerDTO answerDTO
   ) {
     log.debug("REST request to add comment: {} to Topic #{}", answerDTO, topicId);
-
     return topicService.addComment(topicId, answerDTO)
         .map(response -> ResponseEntity.ok().body(response))
         .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));

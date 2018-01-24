@@ -67,9 +67,12 @@ public class UserResource {
   @GetMapping("/users/{user_id}")
   public ResponseEntity<User> getById(@PathVariable("user_id") Long userId) {
     log.debug("REST request to retrieve user #{}", userId);
-    return userRepository.findById(userId)
-        .map(response -> ResponseEntity.ok().body(response))
-        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+    if (!userRepository.exists(userId)) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return ResponseEntity.ok().body(userRepository.getOne(userId));
   }
 
   @DeleteMapping("/categories/{user_id}")

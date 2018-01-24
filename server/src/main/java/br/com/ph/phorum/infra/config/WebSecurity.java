@@ -3,7 +3,7 @@ package br.com.ph.phorum.infra.config;
 import br.com.ph.phorum.infra.security.JWTConfigurer;
 import br.com.ph.phorum.infra.security.TokenProvider;
 import javax.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +22,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
+@SuppressWarnings({"PMD.AvoidCatchingGenericException", "PMD.SignatureDeclareThrowsException"})
 @Configuration
 @Import(SecurityProblemSupport.class)
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Slf4j
+@Log4j2
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
   private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -50,7 +51,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   }
 
   @PostConstruct
-  @SuppressWarnings("PMD.AvoidCatchingGenericException")
   public void init() {
     try {
       authenticationManagerBuilder
@@ -70,19 +70,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   public void configure(
       org.springframework.security.config.annotation.web.builders.WebSecurity web) {
     web.ignoring()
-        .antMatchers(HttpMethod.OPTIONS, "/**")
-        .antMatchers("/**");
-    //TODO block it again!
-//      .antMatchers("/app/**/*.{js,html}")
-//      .antMatchers("/i18n/**")
-//      .antMatchers("/content/**")
-//      .antMatchers("/swagger-ui/index.html")
-//      .antMatchers("/test/**")
-//      .antMatchers("/h2-console/**");
+        .antMatchers(HttpMethod.OPTIONS, "/**");
   }
 
   @Override
-  @SuppressWarnings("PMD.SignatureDeclareThrowsException")
   protected void configure(HttpSecurity http) throws Exception {
     http
         .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
@@ -100,15 +91,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authorizeRequests()
-        //TODO
-        .antMatchers("/").permitAll()
-//      .antMatchers("/api/register").permitAll()
-//      .antMatchers("/api/authenticate").permitAll()
-//      .antMatchers("/api/profile-info").permitAll()
-//      .antMatchers("/api/**").authenticated()
-//      .antMatchers("/management/health").permitAll()
-//      .antMatchers("/v2/api-docs/**").permitAll()
-//      .antMatchers("/swagger-resources/configuration/ui").permitAll()
+        .antMatchers("/api/authenticate").permitAll()
+        .antMatchers("/api/**").authenticated()
         .and()
         .apply(securityConfigurerAdapter());
 

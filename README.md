@@ -1,9 +1,6 @@
 Master Build: 
 [![pipeline status](https://gitlab.com/palerique/phorum/badges/master/pipeline.svg)](https://gitlab.com/palerique/phorum/commits/master)
 
-Server Coverage:
-[![coverage report](https://gitlab.com/palerique/phorum/badges/master/coverage.svg)](https://gitlab.com/palerique/phorum/commits/master)
-
 # TODOs:
 - Add a home page with all posts
 - Add a New topic button at home page

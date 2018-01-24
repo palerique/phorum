@@ -13,11 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Authenticate a user from the database.
- */
-@Component("userDetailsService")
 @Log4j2
+@Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
 
   private final UserRepository userRepository;
@@ -39,8 +36,7 @@ public class DomainUserDetailsService implements UserDetailsService {
               .findOneByLogin(lowercaseLogin);
           return userByLoginFromDatabase.map(this::createSpringSecurityUser)
               .orElseThrow(() -> new UsernameNotFoundException(
-                  "User " + lowercaseLogin + " was not found in the " +
-                      "database"));
+                  "User " + lowercaseLogin + " was not found in the database"));
         });
   }
 
