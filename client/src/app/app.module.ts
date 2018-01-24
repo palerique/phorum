@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {TopicService} from './shared/topic/topic.service';
 import {CategoryService} from './shared/category/category.service';
 import {HttpClientModule} from '@angular/common/http';
-import {DialogDataExampleDialog, TopicListComponent} from './topic-list/topic-list.component';
+import {CommentDialogComponent, TopicListComponent} from './topic-list/topic-list.component';
 
 import {GiphyService} from './shared/giphy/giphy.service';
 
@@ -16,6 +16,7 @@ import {
   MatDialogModule,
   MatExpansionModule,
   MatGridListModule,
+  MatIconModule,
   MatInputModule,
   MatListModule,
   MatSelectModule,
@@ -28,21 +29,35 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 
 import {FroalaEditorModule, FroalaViewModule} from 'angular-froala-wysiwyg';
+import {LoginComponent} from './login/login.component';
+import {AuthGuard} from './guard/auth.guard';
+import {AuthenticationService} from './shared/auth/authentication.service';
 
 const appRoutes: Routes = [
-  {path: '', redirectTo: '/topic-list', pathMatch: 'full'},
+  {path: 'login', component: LoginComponent},
+  {
+    path: '',
+    redirectTo: '/topic-list',
+    pathMatch: 'full',
+    canActivate: [AuthGuard]
+  },
   {
     path: 'topic-list',
-    component: TopicListComponent
+    component: TopicListComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'topic-add',
-    component: TopicEditComponent
+    component: TopicEditComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'topic-edit/:id',
-    component: TopicEditComponent
-  }
+    component: TopicEditComponent,
+    canActivate: [AuthGuard]
+  },
+  // otherwise redirect to home
+  {path: '**', redirectTo: ''}
 ];
 
 @NgModule({
@@ -50,7 +65,8 @@ const appRoutes: Routes = [
     AppComponent,
     TopicListComponent,
     TopicEditComponent,
-    DialogDataExampleDialog
+    CommentDialogComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -65,15 +81,18 @@ const appRoutes: Routes = [
     MatGridListModule,
     MatExpansionModule,
     MatDialogModule,
+    MatIconModule,
     FormsModule,
     RouterModule.forRoot(appRoutes),
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot()
   ],
   entryComponents: [
-    DialogDataExampleDialog
+    CommentDialogComponent
   ],
   providers: [
+    AuthGuard,
+    AuthenticationService,
     TopicService,
     CategoryService,
     GiphyService

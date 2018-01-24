@@ -2,9 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TopicService} from '../shared/topic/topic.service';
-import {GiphyService} from '../shared/giphy/giphy.service';
 import {NgForm} from '@angular/forms';
-import {CategoryService} from "../shared/category/category.service";
+import {CategoryService} from '../shared/category/category.service';
+import {AuthenticationService} from '../shared/auth/authentication.service';
 
 @Component({
   selector: 'app-topic-edit',
@@ -21,7 +21,7 @@ export class TopicEditComponent implements OnInit, OnDestroy {
               private router: Router,
               private topicService: TopicService,
               private categoryService: CategoryService,
-              private giphyService: GiphyService) {
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
@@ -31,7 +31,6 @@ export class TopicEditComponent implements OnInit, OnDestroy {
         this.topicService.get(id).subscribe((topic: any) => {
           if (topic) {
             this.topic = topic;
-            this.giphyService.get(topic.name).subscribe(url => topic.giphyUrl = url);
           } else {
             console.log(`Topic with id '${id}' not found, returning to list`);
             this.gotoList();
@@ -42,7 +41,7 @@ export class TopicEditComponent implements OnInit, OnDestroy {
 
     this.categoryService.getAll().subscribe((data: any) => {
       this.categories = data;
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -67,5 +66,12 @@ export class TopicEditComponent implements OnInit, OnDestroy {
 
   compare(t1: any, t2: any): boolean {
     return t1 && t2 ? t1.techId === t2.techId : t1 === t2;
+  }
+
+  userCanChange(topic: any) {
+    if (topic && topic.author && topic.author.id) {
+      return this.authenticationService.getCurrentUserId() === topic.author.id;
+    }
+    return true;
   }
 }

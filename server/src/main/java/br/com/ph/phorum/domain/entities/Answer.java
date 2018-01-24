@@ -1,7 +1,7 @@
 package br.com.ph.phorum.domain.entities;
 
 import br.com.ph.phorum.infra.dto.AnswerDTO;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +35,7 @@ public class Answer {
   private String content;
 
   @Column(nullable = false)
-  private LocalDateTime createdIn;
+  private Instant createdIn;
 
   @ManyToOne
   @JoinColumn(name = "topicId", nullable = false)
@@ -48,7 +48,7 @@ public class Answer {
   public Answer(Topic topic, User author, AnswerDTO answerDTO) {
     this.author = author;
     this.content = answerDTO.getContent();
-    this.createdIn = LocalDateTime.now();
+    this.createdIn = Instant.now();
     this.topic = topic;
   }
 }

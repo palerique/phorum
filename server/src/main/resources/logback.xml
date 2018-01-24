@@ -21,6 +21,7 @@
       <pattern>%d{HH:mm:ss.SSSXXX} %-5level %logger %msg at %class{0}:%line%n</pattern>
     </encoder>
   </appender>
+
   <root level="info">
     <appender-ref ref="STDOUT"/>
     <appender-ref ref="FILE"/>
@@ -33,7 +34,7 @@
   <logger level="INFO" name="org.hibernate"/>
   <logger level="INFO" name="com.amazonaws"/>
   <logger level="INFO" name="org.flywaydb"/>
-  <logger level="debug" name="br.com.ph"/>
+  <logger level="DEBUG" name="br.com.ph"/>
   <logger level="INFO" name="io.restassured"/>
   <logger level="ERROR" name="net.sourceforge.cobertura"/>
   <logger level="ERROR" name="com.zaxxer.hikari"/>

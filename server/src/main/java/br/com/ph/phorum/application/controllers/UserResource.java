@@ -63,7 +63,6 @@ public class UserResource {
     return ResponseEntity.ok().body(userRepository.findAll());
   }
 
-
   @GetMapping("/users/{user_id}")
   public ResponseEntity<User> getById(@PathVariable("user_id") Long userId) {
     log.debug("REST request to retrieve user #{}", userId);
@@ -75,7 +74,14 @@ public class UserResource {
     return ResponseEntity.ok().body(userRepository.getOne(userId));
   }
 
-  @DeleteMapping("/categories/{user_id}")
+  @GetMapping("/users/authenticated")
+  public ResponseEntity<UserDTO> getAuthenticated() {
+    log.debug("REST request to retrieve authenticated user");
+
+    return ResponseEntity.ok().body(userService.getAuthenticated());
+  }
+
+  @DeleteMapping("/users/{user_id}")
   public ResponseEntity<Void> deleteUser(@PathVariable("user_id") Long id) {
     log.debug("REST request to delete User #{}", id);
     userService.delete(id);

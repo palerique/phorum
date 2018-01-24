@@ -1,7 +1,10 @@
 <mat-toolbar color="primary">
   <span>Welcome to PHorum!</span>
+  <span style="flex: 1 1 auto;"></span>
+  <button mat-raised-button color="accent" *ngIf="isAuthenticated()"
+          (click)="logout()">Logout
+  </button>
 </mat-toolbar>
 <div class="mat-app-background basic-container">
   <router-outlet></router-outlet>
 </div>
-

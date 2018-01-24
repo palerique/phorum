@@ -1,7 +1,7 @@
 package br.com.ph.phorum.infra.dto;
 
 import br.com.ph.phorum.domain.entities.Answer;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class AnswerDTO {
   @NotBlank
   private String content;
 
-  private LocalDateTime createdIn;
+  private Instant createdIn;
 
   private UserDTO author;
 

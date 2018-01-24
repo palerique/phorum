@@ -37,7 +37,7 @@ public class TopicResource {
   }
 
   @PostMapping("/topics")
-  public ResponseEntity<Topic> createTopic(@Valid @RequestBody TopicDTO topicDTO)
+  public ResponseEntity<TopicDTO> createTopic(@Valid @RequestBody TopicDTO topicDTO)
       throws URISyntaxException {
     log.debug("REST request to save Topic: {}", topicDTO);
 
@@ -46,12 +46,13 @@ public class TopicResource {
           "idexists");
     } else {
       Topic newTopic = topicService.createTopic(topicDTO);
-      return ResponseEntity.created(new URI("/api/topics/" + newTopic.getId())).body(newTopic);
+      return ResponseEntity.created(new URI("/api/topics/" + newTopic.getId()))
+          .body(new TopicDTO(newTopic));
     }
   }
 
   @PutMapping("/topics")
-  public ResponseEntity<Topic> updateTopic(@Valid @RequestBody TopicDTO topicDTO) {
+  public ResponseEntity<TopicDTO> updateTopic(@Valid @RequestBody TopicDTO topicDTO) {
     log.debug("REST request to update Topic: {}", topicDTO);
 
     if (topicDTO.getId() == null) {
@@ -59,7 +60,7 @@ public class TopicResource {
           "idinexists");
     } else {
       return topicService.updateTopic(topicDTO)
-          .map(response -> ResponseEntity.ok().body(response))
+          .map(response -> ResponseEntity.ok().body(new TopicDTO(response)))
           .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
   }
@@ -72,14 +73,14 @@ public class TopicResource {
   }
 
   @GetMapping("/topics/{topic_id}")
-  public ResponseEntity<Topic> getById(@PathVariable("topic_id") Long topicId) {
+  public ResponseEntity<TopicDTO> getById(@PathVariable("topic_id") Long topicId) {
     log.debug("REST request to retrieve topic #{}", topicId);
 
     if (!topicRepository.exists(topicId)) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    return ResponseEntity.ok().body(topicRepository.getOne(topicId));
+    return ResponseEntity.ok().body(new TopicDTO(topicRepository.getOne(topicId)));
   }
 
   @DeleteMapping("/topics/{topic_id}")

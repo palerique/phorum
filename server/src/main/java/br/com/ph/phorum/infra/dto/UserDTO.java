@@ -41,7 +41,7 @@ public class UserDTO {
 
   private Set<String> authorities;
 
-  UserDTO(User user) {
+  public UserDTO(User user) {
     this.id = user.getId();
     this.login = user.getLogin();
     this.name = user.getName();

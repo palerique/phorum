@@ -2,7 +2,7 @@ package br.com.ph.phorum.infra.dto;
 
 import br.com.ph.phorum.domain.entities.Answer;
 import br.com.ph.phorum.domain.entities.Topic;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
@@ -33,7 +33,7 @@ public class TopicDTO {
   @Size(min = 1, max = Topic.CONTENT_MAX_LENGTH)
   private String content;
 
-  private LocalDateTime createdIn;
+  private Instant createdIn;
 
   private UserDTO author;
 
@@ -51,8 +51,11 @@ public class TopicDTO {
     this.category = new CategoryDTO(topic.getCategory());
 
     List<AnswerDTO> comments = new ArrayList<>();
-    for (Answer answer : topic.getAnswers()) {
-      comments.add(new AnswerDTO(answer));
+    List<Answer> answers = topic.getAnswers();
+    if (answers != null) {
+      for (Answer answer : answers) {
+        comments.add(new AnswerDTO(answer));
+      }
     }
     this.comments = comments;
   }

@@ -33,21 +33,14 @@
     <mat-card-actions>
 
       <button mat-raised-button color="primary" type="submit"
-              [disabled]="!topicForm.form.valid">Save
+              [disabled]="!topicForm.form.valid || !userCanChange(topic)">Save
       </button>
 
       <button mat-raised-button color="warn" (click)="remove(topic.id)"
-              *ngIf="topic.id" type="button">Delete
+              *ngIf="topic.id" type="button" [disabled]="!userCanChange(topic)">Delete
       </button>
       <a mat-raised-button routerLink="/topic-list">Cancel</a>
 
     </mat-card-actions>
-
-    <mat-card-footer>
-      <div class="giphy">
-        <img src="{{topic.giphyUrl}}" alt="{{topic.name}}">
-      </div>
-    </mat-card-footer>
-
   </form>
 </mat-card>

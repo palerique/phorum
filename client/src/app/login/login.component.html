@@ -1,0 +1,50 @@
+<div style="display: flex;
+     align-items: center;
+     justify-content: center;
+     height: 90vh;">
+  <mat-card style="width: 400px">
+
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm.value)">
+
+      <mat-card-header>
+        <mat-card-title>
+          <h1>Login into your account</h1>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <div style="display: flex; flex-direction: column;">
+
+          <mat-form-field>
+            <input matInput
+                   placeholder="Username"
+                   [(ngModel)]="user.username"
+                   required
+                   name="username"
+                   #username>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput
+                   placeholder="Password"
+                   [(ngModel)]="user.password"
+                   required
+                   name="password"
+                   #password>
+          </mat-form-field>
+
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit"
+                [disabled]="!loginForm.form.valid">
+          LOGIN
+        </button>
+      </mat-card-actions>
+
+    </form>
+  </mat-card>
+</div>

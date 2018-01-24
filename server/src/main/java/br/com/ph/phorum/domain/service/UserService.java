@@ -1,8 +1,11 @@
 package br.com.ph.phorum.domain.service;
 
+import br.com.ph.phorum.application.controllers.error.BadRequestAlertException;
 import br.com.ph.phorum.domain.entities.User;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import br.com.ph.phorum.infra.dto.UserDTO;
+import br.com.ph.phorum.infra.security.SecurityUtils;
+import java.util.Optional;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,26 @@ public class UserService {
   public void delete(Long id) {
     userRepository.delete(userRepository.findOne(id));
     log.debug("Deleted User: {}", id);
+  }
+
+  public UserDTO getAuthenticated() {
+    Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
+    if (userLogin.isPresent()) {
+      Optional<User> oneByLogin = userRepository.findOneByLogin(userLogin.get());
+      if (oneByLogin.isPresent()) {
+        return new UserDTO(oneByLogin.get());
+      } else {
+        throwException();
+      }
+    } else {
+      throwException();
+    }
+    return null;
+  }
+
+  private UserDTO throwException() {
+    throw new BadRequestAlertException("A new topic must have an author",
+        "topicManagement", "usernotexists");
   }
 }
 

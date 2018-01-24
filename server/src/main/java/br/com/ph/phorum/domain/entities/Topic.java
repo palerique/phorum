@@ -1,6 +1,6 @@
 package br.com.ph.phorum.domain.entities;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,7 +42,7 @@ public class Topic {
   private String content;
 
   @Column(nullable = false)
-  private LocalDateTime createdIn;
+  private Instant createdIn;
 
   @ManyToOne
   @JoinColumn(name = "userId", nullable = false)

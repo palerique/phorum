@@ -38,8 +38,8 @@ public class TokenProvider {
   public void init() {
     this.secretKey = "123456";
 
-    this.tokenValidityInMilliseconds = 1000 * 600;
-    this.tokenValidityInMilliRememberMe = 1000 * 600;
+    this.tokenValidityInMilliseconds = 60_000_000;
+    this.tokenValidityInMilliRememberMe = 60_000_000;
   }
 
   public String createToken(Authentication authentication, Boolean rememberMe) {

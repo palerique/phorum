@@ -5,13 +5,11 @@
     <mat-expansion-panel-header>
       <mat-panel-title>
         <span>{{topic.name}}</span>&nbsp;
-        <span style="color: darkgray">{{topic.createdIn | date:'yyyy/MMM/dd HH:mm'}}</span>&nbsp;
+        <span style="color: darkgray">{{topic.createdIn * 1000 | date:'yyyy/MMM/dd HH:mm'}}</span>&nbsp;
         <span style="color: #67ff6d">{{topic.author.name}}</span>&nbsp;
       </mat-panel-title>
       <mat-panel-description style="flex-grow: 0">
         <span style="color: #ff8e7b">{{topic.category.name}}</span>
-        <!--<mat-icon>map</mat-icon>-->
-        <!--<img mat-card-avatar src="{{topic.giphyUrl}}" alt="{{topic.name}}">-->
       </mat-panel-description>
 
     </mat-expansion-panel-header>
@@ -28,7 +26,8 @@
       <mat-list>
         <mat-list-item *ngFor="let comment of topic.comments">
           <span>{{comment.author.name}}</span>&nbsp;
-          <span style="color: darkgray">{{comment.createdIn | date:'yyyy/MMM/dd HH:mm'}}</span>&nbsp;
+          <span
+            style="color: darkgray">{{comment.createdIn * 1000| date:'yyyy/MMM/dd HH:mm'}}</span>&nbsp;
           <span [innerHTML]="comment.content"></span>
           <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
         </mat-list-item>
@@ -38,8 +37,16 @@
 
     <mat-action-row>
       <a mat-button (click)="openCommentDialog(topic)" color="Accent">INSERT COMMENT</a>
-      <a mat-button [routerLink]="['/topic-edit', topic.id]" color="primary">EDIT</a>
-      <button mat-button color="warn" (click)="remove(topic.id)" type="button">
+
+      <!--<a mat-button [routerLink]="['/topic-edit', topic.id]" color="primary"-->
+      <!--disabled="!userCanChange(topic)">EDIT</a>-->
+
+      <button mat-button [routerLink]="['/topic-edit', topic.id]" color="primary"
+              [disabled]="!userCanChange(topic)">EDIT
+      </button>
+
+      <button mat-button color="warn" (click)="remove(topic.id)" type="button"
+              [disabled]="!userCanChange(topic)">
         DELETE
       </button>
     </mat-action-row>

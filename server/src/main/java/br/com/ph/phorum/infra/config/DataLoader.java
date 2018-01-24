@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataLoader implements ApplicationRunner {
 
-  private UserService userService;
-  private CategoryRepository categoryRepository;
+  private final UserService userService;
+  private final CategoryRepository categoryRepository;
 
   @Autowired
   public DataLoader(UserService userService,
@@ -28,6 +28,13 @@ public class DataLoader implements ApplicationRunner {
         .password("123456")
         .email("palerique@gmail.com")
         .name("Paulo Henrique")
+        .build());
+
+    userService.createUser(UserDTO.builder()
+        .login("ph2")
+        .password("123456")
+        .email("ph2@gmail.com")
+        .name("PH")
         .build());
 
     categoryRepository.save(Category.builder().name("Development").build());

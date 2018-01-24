@@ -1,5 +1,6 @@
 package br.com.ph.phorum.domain.service;
 
+import br.com.ph.phorum.application.controllers.error.BadRequestAlertException;
 import br.com.ph.phorum.domain.entities.Answer;
 import br.com.ph.phorum.domain.entities.Topic;
 import br.com.ph.phorum.domain.entities.User;
@@ -9,7 +10,8 @@ import br.com.ph.phorum.domain.repository.TopicRepository;
 import br.com.ph.phorum.domain.repository.UserRepository;
 import br.com.ph.phorum.infra.dto.AnswerDTO;
 import br.com.ph.phorum.infra.dto.TopicDTO;
-import java.time.LocalDateTime;
+import br.com.ph.phorum.infra.security.SecurityUtils;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,20 +44,17 @@ public class TopicService {
     return topicRepository.save(Topic.builder()
         .name(topicDTO.getName())
         .content(topicDTO.getContent())
-        .createdIn(LocalDateTime.now())
+        .createdIn(Instant.now())
         .author(getUser())
         .category(categoryRepository.getOne(topicDTO.getCategory().getId()))
         .build());
   }
 
   public User getUser() {
-//    User user = SecurityUtils.getCurrentUserLogin()
-//        .flatMap(userRepository::findOneByLogin)
-//        .orElseThrow(() -> new BadRequestAlertException("A new topic must have an author",
-//            "topicManagement", "usernotexists"));
-
-    //TODO: remove when JWT auth is working!
-    return userRepository.findAll().get(0);
+    return SecurityUtils.getCurrentUserLogin()
+        .flatMap(userRepository::findOneByLogin)
+        .orElseThrow(() -> new BadRequestAlertException("A new topic must have an author",
+            "topicManagement", "usernotexists"));
   }
 
   public void delete(Long id) {
